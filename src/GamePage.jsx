@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import gunshotSound from "./gunshot.mp3";
 
 const GamePage = () => {
   const [balls, setBalls] = useState([]);
@@ -9,6 +10,8 @@ const GamePage = () => {
   const [gameStarted, setGameStarted] = useState(false);
   const [totalClicks, setTotalClicks] = useState(0);
   const [missedClicks, setMissedClicks] = useState(0);
+
+  const gunshotAudio = new Audio(gunshotSound);
 
   useEffect(() => {
     let timer;
@@ -59,12 +62,14 @@ const GamePage = () => {
     const updatedBalls = balls.filter((ball) => ball.id !== ballId);
     const shotHit = balls.some((ball) => ball.id === ballId);
     setTotalClicks((prevClicks) => prevClicks + 1);
+    gunshotAudio.play();
     if (shotHit) {
       setScore((prevScore) => prevScore + 1);
     } else {
       setMissedClicks((prevMisses) => prevMisses + 1);
     }
     setBalls(updatedBalls);
+
     calculateAccuracy(totalClicks + 1, shotHit ? missedClicks : missedClicks + 1);
   };
 
